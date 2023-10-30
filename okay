@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Traffic Light</title>
+    <style>
+        .traffic-light {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .light {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #000;
+            border-radius: 50%;
+            margin: 5px;
+        }
+
+        .red { background: red; }
+        .yellow { background: yellow; }
+        .green { background: green; }
+    </style>
+</head>
+<body>
+    <div class="traffic-light">
+        <div class="light red"></div>
+        <div class="light yellow"></div>
+        <div class="light green"></div>
+        <div id="countdown">10</div>
+    </div>
+
+    <script>
+        function updateCountdown() {
+            var countdownElement = document.getElementById('countdown');
+            var seconds = parseInt(countdownElement.innerText);
+            if (seconds > 0) {
+                seconds--;
+                countdownElement.innerText = seconds;
+                setTimeout(updateCountdown, 1000); // Update countdown every second (1000ms)
+            } else {
+                changeLight();
+            }
+        }
+
+        function changeLight() {
+            var lights = document.querySelectorAll('.light');
+            
+            function resetLights() {
+                lights.forEach(function (light) {
+                    light.style.opacity = 0.3;
+                });
+            }
+            
+            function cycleLights(lightIndex) {
+                resetLights();
+                lights[lightIndex].style.opacity = 1;
+                setTimeout(function () {
+                    lights[lightIndex].style.opacity = 0.3;
+                    lightIndex = (lightIndex + 1) % lights.length;
+                    cycleLights(lightIndex);
+                }, 10000); // Each light stays on for 10 seconds (30 seconds total)
+            }
+            
+            resetLights(); // Ensure lights start dimmed
+            cycleLights(0); // Start with the first light (red)
+        }
+
+        // Initial start
+        updateCountdown();
+    </script>
+</body>
+</html>
